@@ -60,110 +60,7 @@ h1 i { margin-right: 15px; color: #D2691E; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } 
 .shelf-title { text-align: center; margin-bottom: 18px; font-size: 1.2rem; font-weight: bold; letter-spacing: 0.6px; color: #f0e6d2; background: linear-gradient(135deg, #3E2723, #5D4037); border: 2px solid #D2691E; border-radius: 8px; padding: 10px 22px; display: block; width: fit-content; margin-left: auto; margin-right: auto; box-shadow: 0 6px 15px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.1); text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Georgia', 'Times New Roman', serif; max-width: 80%; word-wrap: break-word; text-align: center; } 
 .shelf-title::before { content: "ΘΕΜΑ:"; margin-right: 8px; color: #D2691E; font-weight: normal; font-size: 0.9rem; }
-/* ========== MOBILE (ΜΙΑ ΣΤΗΛΗ ΜΟΝΟ ΣΕ ΠΡΑΓΜΑΤΙΚΑ ΜΙΚΡΕΣ ΟΘΟΝΕΣ) ========== */
-@media (max-width: 550px) {
-  /* Γενικές προσαρμογές */
-  body { padding: 15px 10px; }
-  .container { padding: 15px; border-radius: 15px; }
-  h1 { font-size: 1.8rem; }
-  .library-viewport { margin: 20px 0; padding: 20px 0; }
-  .nav-arrow { width: 50px; height: 50px; font-size: 1.5rem; }
-  .nav-arrow.left { left: 10px; }
-  .nav-arrow.right { right: 10px; }
-  .shelf-title { font-size: 1rem; padding: 8px 16px; max-width: 90%; white-space: normal; }
 
-  /* Section buttons - 2 στη σειρά */
-  .section-buttons {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    padding: 0 5px !important;
-  }
-  .section-btn {
-    min-width: auto !important;
-    width: calc(50% - 8px) !important;
-    font-size: 0.75rem !important;
-    padding: 8px 6px !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-  }
-
-  /* Βιβλία: μία στήλη */
-  .books-row {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 20px !important;
-    width: 100% !important;
-    max-width: 300px !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-  }
-
-  .book {
-    max-width: 130px !important;
-    width: 130px !important;
-    margin: 0 auto !important;
-  }
-
-  .book-spine {
-    height: 190px !important;
-  }
-
-  /* Εξώφυλλα - μικρό πλάτος */
-  .book-cover,
-  .books-row .book:nth-child(even) .book-cover {
-    width: 100px !important;
-    background-size: contain !important;
-    background-position: center !important;
-  }
-
-  /* Επιλεγμένο βιβλίο - μόνο κατακόρυφη μετατόπιση */
-  .book.selected {
-    transform: translateY(-15px) !important;
-    margin-bottom: 25px !important;
-  }
-
-  /* Κουμπιά δράσης - εμφανίζονται μόνο όταν selected, κάτω από το βιβλίο */
-  .book-actions {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    transform: none !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin-top: 12px !important;
-    width: 100% !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transition: opacity 0.3s ease, visibility 0.3s ease !important;
-    pointer-events: none !important;
-  }
-
-  .book.selected .book-actions {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-  }
-
-  .book-actions .action-btn {
-    min-width: 130px !important;
-    font-size: 0.85rem !important;
-    padding: 8px 12px !important;
-    white-space: normal !important;
-  }
-
-  /* Πολύ μικρές οθόνες (κάτω από 400px) */
-  @media (max-width: 400px) {
-    .book { max-width: 115px !important; width: 115px !important; }
-    .book-spine { height: 170px !important; }
-    .book-cover { width: 90px !important; }
-    .book-actions .action-btn { min-width: 110px !important; font-size: 0.75rem !important; padding: 6px 8px !important; }
-  }
-}
 /* ========== ΚΟΥΜΠΙΑ ΔΡΑΣΗΣ (BOOK-ACTIONS) ========== */
 .book-actions {
     position: absolute;
@@ -876,6 +773,7 @@ return false;
 																</script>
 															</body>
 														</html>
+
 
 
 
