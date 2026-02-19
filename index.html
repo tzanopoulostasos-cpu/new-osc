@@ -60,8 +60,9 @@ h1 i { margin-right: 15px; color: #D2691E; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } 
 .shelf-title { text-align: center; margin-bottom: 18px; font-size: 1.2rem; font-weight: bold; letter-spacing: 0.6px; color: #f0e6d2; background: linear-gradient(135deg, #3E2723, #5D4037); border: 2px solid #D2691E; border-radius: 8px; padding: 10px 22px; display: block; width: fit-content; margin-left: auto; margin-right: auto; box-shadow: 0 6px 15px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.1); text-shadow: 1px 1px 3px rgba(0,0,0,0.7); font-family: 'Georgia', 'Times New Roman', serif; max-width: 80%; word-wrap: break-word; text-align: center; } 
 .shelf-title::before { content: "ΘΕΜΑ:"; margin-right: 8px; color: #D2691E; font-weight: normal; font-size: 0.9rem; }
-/* ========== MOBILE (ΜΙΑ ΣΤΗΛΗ ΜΟΝΟ ΣΕ ΠΡΑΓΜΑΤΙΚΑ ΜΙΚΡΕΣ ΟΘΟΝΕΣ) ========== */
-@media (max-width: 550px) {
+/* ========== ΕΝΙΑΙΟ MEDIA QUERY ΓΙΑ ΟΘΟΝΕΣ ΜΕ ΠΛΑΤΟΣ <= 600px (ΚΙΝΗΤΑ & ΜΙΚΡΑ iframe) ========== */
+@media (max-width: 600px) {
+
   /* Γενικές προσαρμογές */
   body { padding: 15px 10px; }
   .container { padding: 15px; border-radius: 15px; }
@@ -70,7 +71,7 @@ h1 i { margin-right: 15px; color: #D2691E; }
   .nav-arrow { width: 50px; height: 50px; font-size: 1.5rem; }
   .nav-arrow.left { left: 10px; }
   .nav-arrow.right { right: 10px; }
-  .shelf-title { font-size: 1rem; padding: 8px 16px; max-width: 90%; white-space: normal; }
+  .shelf-title { font-size: 1rem; padding: 8px 16px; max-width: 90%; white-space: normal; margin-left: auto; margin-right: auto; text-align: center; }
 
   /* Section buttons - 2 στη σειρά */
   .section-buttons {
@@ -89,26 +90,42 @@ h1 i { margin-right: 15px; color: #D2691E; }
     word-break: break-word !important;
   }
 
-  /* Βιβλία: μία στήλη */
-  .books-row {
+  /* ΡΑΦΙΑ - κεντράρισμα */
+  .shelf-unit {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 20px !important;
+    justify-content: flex-start !important;
+    padding: 0 10px !important;
     width: 100% !important;
-    max-width: 300px !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
   }
 
+  /* ΒΙΒΛΙΑ: μία στήλη (χρησιμοποιούμε grid για πιο σταθερή συμπεριφορά) */
+  .books-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    justify-items: center !important;
+    max-width: 300px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 10px !important;
+  }
+
+  /* Βιβλίο: μέγεθος και κεντράρισμα */
   .book {
     max-width: 130px !important;
     width: 130px !important;
-    margin: 0 auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .book-spine {
     height: 190px !important;
+    background-size: cover !important;
+    background-position: center left 20% !important;
+    box-shadow: inset 2px 0 6px rgba(0,0,0,0.4), 6px 6px 18px rgba(0,0,0,0.5) !important;
+    filter: brightness(1.2) saturate(1.2) contrast(1.05) !important;
   }
 
   /* Εξώφυλλα - μικρό πλάτος */
@@ -117,12 +134,29 @@ h1 i { margin-right: 15px; color: #D2691E; }
     width: 100px !important;
     background-size: contain !important;
     background-position: center !important;
+    background-repeat: no-repeat !important;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
 
-  /* Επιλεγμένο βιβλίο - μόνο κατακόρυφη μετατόπιση */
+  /* Επιλεγμένο βιβλίο - μετατόπιση */
   .book.selected {
     transform: translateY(-15px) !important;
     margin-bottom: 25px !important;
+  }
+
+  /* Βελτιωμένη θέση εξωφύλλου για επιλεγμένο βιβλίο */
+  .book.selected .book-cover {
+    transform: perspective(700px) rotateY(-18deg) translateX(15px) !important;
+    z-index: 1000 !important;
+    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.8), inset 3px 0 10px rgba(255, 255, 255, 0.15) !important;
+    filter: brightness(1.3) saturate(1.3) contrast(1.1) !important;
+  }
+  
+  .books-row .book.selected:nth-child(even) .book-cover {
+    transform: perspective(700px) rotateY(18deg) translateX(-15px) !important;
+    z-index: 1000 !important;
+    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8), inset -3px 0 10px rgba(255, 255, 255, 0.15) !important;
+    filter: brightness(1.3) saturate(1.3) contrast(1.1) !important;
   }
 
   /* Κουμπιά δράσης - εμφανίζονται μόνο όταν selected, κάτω από το βιβλίο */
@@ -156,238 +190,7 @@ h1 i { margin-right: 15px; color: #D2691E; }
     white-space: normal !important;
   }
 
-  /* Πολύ μικρές οθόνες (κάτω από 400px) */
-  @media (max-width: 400px) {
-    .book { max-width: 115px !important; width: 115px !important; }
-    .book-spine { height: 170px !important; }
-    .book-cover { width: 90px !important; }
-    .book-actions .action-btn { min-width: 110px !important; font-size: 0.75rem !important; padding: 6px 8px !important; }
-  }
-}
-/* ========== ΚΟΥΜΠΙΑ ΔΡΑΣΗΣ (BOOK-ACTIONS) ========== */
-.book-actions {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    z-index: 20;
-    pointer-events: none;
-}
-
-.book.selected .book-actions {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.book:nth-child(odd) .book-actions {
-    left: 100%;
-    margin-left: 20px;
-}
-
-.book:nth-child(even) .book-actions {
-    right: 100%;
-    margin-right: 20px;
-}
-
-.book-actions .action-btn {
-    min-width: 130px;
-    text-align: center;
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-    border: 2px solid #D2691E;
-    border-radius: 30px;
-    color: #f0e6d2;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: all 0.3s;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.book-actions .action-btn:hover {
-    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.7);
-    border-color: #f0e6d2;
-}
-
-.book-actions .download-btn {
-    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
-    border-color: #3498db;
-}
-
-.book-actions .download-btn:hover {
-    background: linear-gradient(135deg, #34495E 0%, #2C3E50 100%);
-    border-color: #f0e6d2;
-}
-
-                                                                  /* ========== ΕΠΕΙΓΟΥΣΑ ΔΙΟΡΘΩΣΗ ΚΕΝΤΡΑΡΙΣΜΑΤΟΣ MOBILE PORTRAIT ========== */
-@media (max-width: 768px) and (orientation: portrait) {
-  /* ΑΝΑΓΚΑΣΤΙΚΟ ΚΕΝΤΡΑΡΙΣΜΑ - ΕΠΕΙΓΟΝ */
-  .books-row {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 25px !important;
-    margin: 0 auto !important;
-    padding: 0 10px !important;
-    width: 100% !important;
-    max-width: 300px !important;
-  }
-  
-  .book {
-    max-width: 160px !important;
-    width: 160px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-  }
-  
-  /* ΚΕΝΤΡΑΡΙΣΜΑ ΡΑΦΙΟΥ */
-  .shelf-unit {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    padding: 0 10px !important;
-    width: 100% !important;
-  }
-  
-  /* ΚΕΝΤΡΑΡΙΣΜΑ ΤΙΤΛΟΥ */
-  .shelf-title {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    text-align: center !important;
-    display: block !important;
-    width: 90% !important;
-  }
-  
-  /* ΕΞΑΣΦΑΛΙΣΗ ΟΤΙ ΤΑ ΒΙΒΛΙΑ ΕΙΝΑΙ ΚΕΝΤΡΑ */
-  .book:nth-child(1),
-  .book:nth-child(2),
-  .book:nth-child(3),
-  .book:nth-child(4) {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    float: none !important;
-    clear: both !important;
-  }
-  
-  /* ΚΡΙΤΙΚΟ: ΔΙΟΡΘΩΣΗ ΜΕΤΑΤΟΠΙΣΗΣ ΓΙΑ ΕΠΙΛΕΓΜΕΝΑ ΒΙΒΛΙΑ */
-  .book.selected {
-    transform: translateY(-20px) translateX(0px) !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-  
-  .books-row .book.selected:nth-child(even) {
-    transform: translateY(-20px) translateX(0px) !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-}
- /* ========== ΒΕΛΤΙΩΜΕΝΟ ΜΕΙΩΜΕΝΟ ΕΞΩΦΥΛΛΟ MOBILE ========== */
-@media (max-width: 768px) and (orientation: portrait) {
-  /* ΜΕΙΩΜΕΝΟ ΠΛΑΤΟΣ ΕΞΩΦΥΛΛΟΥ */
-  .book-cover,
-  .books-row .book:nth-child(even) .book-cover {
-    width: 100px !important;
-    background-size: contain !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-  }/* Κουμπιά δράσης στο mobile - κάθετα κάτω από το βιβλίο, εμφανίζονται μόνο όταν selected */
-.book-actions {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    transform: none !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin-top: 12px !important;
-    width: 100% !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transition: opacity 0.3s ease, visibility 0.3s ease !important;
-    pointer-events: none !important;
-}
-
-.book.selected .book-actions {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-}
-
-.book-actions .action-btn {
-    min-width: 130px !important;
-    font-size: 0.85rem !important;
-    padding: 8px 12px !important;
-    white-space: normal !important;
-}
-  
-  /* ΒΕΛΤΙΩΜΕΝΗ ΘΕΣΗ ΚΑΙ ΕΦΕ */
-  .book.selected .book-cover {
-    transform: perspective(700px) rotateY(-18deg) translateX(15px) !important;
-    z-index: 1000 !important;
-    box-shadow: 15px 0 40px rgba(0, 0, 0, 0.8),
-                inset 3px 0 10px rgba(255, 255, 255, 0.15) !important;
-    filter: brightness(1.3) saturate(1.3) contrast(1.1) !important;
-  }
-  
-  .books-row .book.selected:nth-child(even) .book-cover {
-    transform: perspective(700px) rotateY(18deg) translateX(-15px) !important;
-    z-index: 1000 !important;
-    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8),
-                inset -3px 0 10px rgba(255, 255, 255, 0.15) !important;
-    filter: brightness(1.3) saturate(1.3) contrast(1.1) !important;
-  }
-  
-  /* ΑΝΑΠΡΟΣΑΡΜΟΓΗ ΒΙΒΛΙΩΝ */
-  .book {
-    max-width: 130px !important;
-    width: 130px !important;
-    margin: 0 auto !important;
-  }
-  
-  .book-spine {
-    height: 190px !important;
-    background-size: cover !important;
-    background-position: center left 20% !important;
-    box-shadow: inset 2px 0 6px rgba(0,0,0,0.4),
-                6px 6px 18px rgba(0,0,0,0.5) !important;
-    filter: brightness(1.2) saturate(1.2) contrast(1.05) !important;
-  }
-  
-  /* ΚΕΝΤΡΑΡΙΣΜΑ */
-  .books-row {
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    gap: 20px !important;
-  }
-  
-  .book.selected {
-    transform: translateY(-15px) !important;
-    margin-bottom: 25px !important;
-  }
-  
-  /* ΕΦΕ HOVER */
+  /* Hover effects (για συσκευές αφής δεν έχουν νόημα, αλλά δεν βλάπτουν) */
   .book:hover:not(.selected) {
     transform: translateY(-5px) !important;
     transition: transform 0.3s ease !important;
@@ -397,49 +200,36 @@ h1 i { margin-right: 15px; color: #D2691E; }
     opacity: 0.9 !important;
     filter: brightness(0.95) !important;
   }
-}
 
-/* ========== ΕΞΤΡΑ ΜΙΚΡΟ ΚΙΝΗΤΟ ========== */
-@media (max-width: 400px) and (orientation: portrait) {
-  .book-cover,
-  .books-row .book:nth-child(even) .book-cover {
-    width: 105px !important;
+  /* Πολύ μικρές οθόνες (κάτω από 400px) - υπερκάλυψη */
+  @media (max-width: 400px) {
+    .book {
+      max-width: 115px !important;
+      width: 115px !important;
+    }
+    .book-spine {
+      height: 170px !important;
+    }
+    .book-cover,
+    .books-row .book:nth-child(even) .book-cover {
+      width: 90px !important;
+    }
+    .book-actions .action-btn {
+      min-width: 110px !important;
+      font-size: 0.75rem !important;
+      padding: 6px 8px !important;
+    }
+    .books-row {
+      gap: 15px !important;
+      max-width: 250px !important;
+    }
+    .book.selected .book-cover {
+      transform: perspective(700px) rotateY(-15deg) translateX(10px) !important;
+    }
+    .books-row .book.selected:nth-child(even) .book-cover {
+      transform: perspective(700px) rotateY(15deg) translateX(-10px) !important;
+    }
   }
-  
-  .book {
-    max-width: 120px !important;
-    width: 120px !important;
-  }
-  
-  .book-spine {
-    height: 170px !important;
-  }
-  
-  .books-row {
-    gap: 15px !important;
-    max-width: 250px !important;
-  }
-  
-  .book.selected .book-cover {
-    transform: perspective(700px) rotateY(-15deg) translateX(10px) !important;
-  }
-  
-  .books-row .book.selected:nth-child(even) .book-cover {
-    transform: perspective(700px) rotateY(15deg) translateX(-10px) !important;
-  }
-}    
-     @media (max-width: 768px) and (orientation: portrait) {
-    .section-buttons {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        padding: 0 5px !important;
-    }.book-actions .action-btn {
-    min-width: 110px !important;
-    font-size: 0.75rem !important;
-    padding: 6px 8px !important;
-}
 }</style>
 															</head>
 															<body>
@@ -876,4 +666,5 @@ return false;
 																</script>
 															</body>
 														</html>
+
 
